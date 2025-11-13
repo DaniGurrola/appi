@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Buscador nutricional</h1>
+<form method="POST">
+    <div class="mb-3">
+    <label for="foodInput" class="form-label">Alimento:</label>
+    <input type="text" class="form-control" id="foodInput" name="food" placeholder="Ej: manzana">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+{% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+{% endif %}
+{% endblock %}

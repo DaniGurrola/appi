@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Resultados para: {{ food }}</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nutriente</th>
+        <th>Valor</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for key, value in nutrients.items() %}
+    <tr>
+        <td>{{ key }}</td>
+        <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<a href="/" class="btn btn-secondary">Nueva búsqueda</a>
+{% endblock %}
