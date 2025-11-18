@@ -3,9 +3,9 @@ import requests
 
 app = Flask(__name__)
 
-API_URL = "https://api.edamam.com/api/food-database/v2/parser"
-APP_ID = "TU_APP_ID"
-APP_KEY = "TU_APP_KEY"
+app.secret_key = 'tu clave'
+API_URL = "https://api.nal.usda.gov/fdc/v1/foods/search"
+API_KEY = "ZbbRfULye2wWXsAx49Q9ZwhmsDWqAztO7MfBi4Hu"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -13,24 +13,32 @@ def index():
         food = request.form.get('food')
         if not food:
             return render_template('index.html', error="Por favor ingresa un alimento.")
+
         params = {
-            "ingr": food,
-            "app_id": APP_ID,
-            "app_key": APP_KEY
+            "query": food,
+            "api_key": API_KEY
         }
+
         resp = requests.get(API_URL, params=params)
+
         if resp.status_code != 200:
             return render_template('index.html', error="Error al consultar la API.")
+
         data = resp.json()
-        hints = data.get("hints", [])
-        if not hints:
+        foods = data.get("foods", [])
+
+        if not foods:
             return render_template('index.html', error="No se encontraron datos para ese alimento.")
-        first = hints[0]
-        food_label = first["food"]["label"]
-        nutrients = first["food"]["nutrients"]
-        return render_template('result.html', food=food_label, nutrients=nutrients)
+
+        first = foods[0]
+        food_label = first.get("description", "Sin nombre")
+
+        nutrients = {n["nutrientName"]: n["value"] for n in first.get("foodNutrients", [])}
+
+        return render_template('resultados.html', food=food_label, nutrients=nutrients)
+
     return render_template('index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-hsdjsdjgfdjfgh
